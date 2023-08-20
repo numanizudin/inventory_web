@@ -65,19 +65,41 @@ require 'cek.php';
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>No</th>
+                                            <th>Tanggal</th>
                                             <th>Nama Barang</th>
-                                            <th>Deskripsi</th>
+                                            <th>Jumlah</th>
                                             <th>Stock</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>61</td>
-                                        </tr>
+
+                                        <?php
+                                        $ambilsemuadatastock = mysqli_query($conn, "SELECT * FROM masuk m, stock s WHERE s.id_barang = m.id_barang");
+                                        while ($data = mysqli_fetch_array($ambilsemuadatastock)) {
+                                            $tanggal = $data['tanggal'];
+                                            $namabarang = $data['nama_barang'];
+                                            $qty = $data['qty'];
+                                            $keterangan = $data['keterangan'];
+                                            ?>
+                                            <tr>
+                                                <td>
+                                                    <?= $tanggal; ?>
+                                                </td>
+                                                <td>
+                                                    <?= $namabarang; ?>
+                                                </td>
+                                                <td>
+                                                    <?= $qty; ?>
+                                                </td>
+                                                <td>
+                                                    <?= $keterangan; ?>
+                                                </td>
+                                            </tr>
+                                            <?php
+                                        }
+                                        ;
+                                        ?>
+
                                     </tbody>
                                 </table>
                             </div>

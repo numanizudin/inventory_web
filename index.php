@@ -72,12 +72,34 @@ require 'cek.php';
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>61</td>
-                                        </tr>
+
+
+                                        <?php
+                                        $ambilsemuadatastock = mysqli_query($conn, "SELECT * FROM stock");
+                                        $i = 1;
+                                        while ($data = mysqli_fetch_array($ambilsemuadatastock)) {
+                                            $namabarang = $data['nama_barang'];
+                                            $deskripsi = $data['deskripsi'];
+                                            $stock = $data['stock'];
+                                            ?>
+                                            <tr>
+                                                <td>
+                                                    <?= $i++; ?>
+                                                </td>
+                                                <td>
+                                                    <?= $namabarang; ?>
+                                                </td>
+                                                <td>
+                                                    <?= $deskripsi; ?>
+                                                </td>
+                                                <td>
+                                                    <?= $stock; ?>
+                                                </td>
+                                            </tr>
+                                            <?php
+                                        }
+                                        ;
+                                        ?>
                                     </tbody>
                                 </table>
                             </div>
