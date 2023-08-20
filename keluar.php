@@ -142,7 +142,7 @@ require 'cek.php';
                     <br>
                     <input type="text" name="penerima" placeholder="Penerima" class="form-control" required>
                     <br>
-                    <button type="submit" class="btn btn-primary" name="addnewbarang">Submit</button>
+                    <button type="submit" class="btn btn-primary" name="addbarangkeluar">Submit</button>
                 </div>
             </form>
 
