@@ -11,7 +11,7 @@ require 'cek.php';
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Inventory HOKBEN</title>
+    <title>Kelola Admin</title>
     <link href="css/styles.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet"
         crossorigin="anonymous" />
@@ -56,40 +56,21 @@ require 'cek.php';
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid">
-                    <h1 class="mt-4">Inventory</h1>
+                    <h1 class="mt-4">Kelola Admin</h1>
                     <div class="card mb-4">
                         <div class="card-header">
                             <!-- Button to Open the Modal -->
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                                Tambah Data Barang Baru
+                                Tambah Akun Admin
                             </button>
-                            <a href="export.php" class="btn btn-info">Export Data</a>
                         </div>
                         <div class="card-body">
-
-                            <?php
-                            $ambildatastock = mysqli_query($conn, "SELECT * FROM stock WHERE stock < 100");
-
-                            while ($fetch = mysqli_fetch_array($ambildatastock)) {
-                                $barang = $fetch['nama_barang'];
-                                ?>
-                                <div class="alert alert-danger">
-                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                    <strong>Perhatian!</strong> Stock
-                                    <?= $barang; ?> Tersisa Sedikit.
-                                </div>
-                                <?php
-                            }
-                            ?>
-
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Nama Barang</th>
-                                            <th>Deskripsi</th>
-                                            <th>Stock</th>
+                                            <th>Email</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -97,47 +78,40 @@ require 'cek.php';
 
 
                                         <?php
-                                        $ambilsemuadatastock = mysqli_query($conn, "SELECT * FROM stock");
+                                        $ambilsemuadataadmin = mysqli_query($conn, "SELECT * FROM login");
                                         $i = 1;
-                                        while ($data = mysqli_fetch_array($ambilsemuadatastock)) {
-                                            $namabarang = $data['nama_barang'];
-                                            $deskripsi = $data['deskripsi'];
-                                            $stock = $data['stock'];
-                                            $idb = $data['id_barang'];
+                                        while ($data = mysqli_fetch_array($ambilsemuadataadmin)) {
+                                            $email = $data['email'];
+                                            $iduser = $data['iduser'];
+                                            $pw = $data['password'];
                                             ?>
                                             <tr>
                                                 <td>
                                                     <?= $i++; ?>
                                                 </td>
                                                 <td>
-                                                    <?= $namabarang; ?>
-                                                </td>
-                                                <td>
-                                                    <?= $deskripsi; ?>
-                                                </td>
-                                                <td>
-                                                    <?= $stock; ?>
+                                                    <?= $email; ?>
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn btn-warning" data-toggle="modal"
-                                                        data-target="#edit<?= $idb; ?>">
+                                                        data-target="#edit<?= $iduser; ?>">
                                                         Edit
                                                     </button>
                                                     <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                        data-target="#delete<?= $idb; ?>">
+                                                        data-target="#delete<?= $iduser; ?>">
                                                         Delete
                                                     </button>
                                                 </td>
                                             </tr>
 
                                             <!-- EDIT Modal -->
-                                            <div class="modal fade" id="edit<?= $idb; ?>">
+                                            <div class="modal fade" id="edit<?= $iduser; ?>">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
 
                                                         <!-- Modal Header -->
                                                         <div class="modal-header">
-                                                            <h4 class="modal-title">Edit Barang</h4>
+                                                            <h4 class="modal-title">Edit User</h4>
                                                             <button type="button" class="close"
                                                                 data-dismiss="modal">&times;</button>
                                                         </div>
@@ -146,17 +120,16 @@ require 'cek.php';
                                                         <form method="post">
                                                             <div class="modal-body">
                                                                 <br>
-                                                                <input type="text" name="namabarang"
-                                                                    value="<?= $namabarang; ?>" class="form-control"
-                                                                    required>
+                                                                <input type="email" name="emailadmin" value="<?= $email; ?>"
+                                                                    class="form-control" placeholder="Email" required>
                                                                 <br>
-                                                                <input type="text" name="deskripsi"
-                                                                    value="<?= $deskripsi; ?>" class="form-control"
-                                                                    required>
+                                                                <input type="password" name="passwordbaru"
+                                                                    class="form-control" value="<?= $pw; ?>"
+                                                                    placeholder="Password">
                                                                 <br>
-                                                                <input type="hidden" name="idb" value="<?= $idb; ?>">
+                                                                <input type="hidden" name="id" value="<?= $iduser; ?>">
                                                                 <button type="submit" class="btn btn-primary"
-                                                                    name="updatebarang">Simpan</button>
+                                                                    name="updateadmin">Simpan</button>
                                                             </div>
                                                         </form>
 
@@ -165,13 +138,13 @@ require 'cek.php';
                                             </div>
 
                                             <!-- DELETE Modal -->
-                                            <div class="modal fade" id="delete<?= $idb; ?>">
+                                            <div class="modal fade" id="delete<?= $iduser; ?>">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
 
                                                         <!-- Modal Header -->
                                                         <div class="modal-header">
-                                                            <h4 class="modal-title">Hapus Barang?</h4>
+                                                            <h4 class="modal-title">Hapus Akun?</h4>
                                                             <button type="button" class="close"
                                                                 data-dismiss="modal">&times;</button>
                                                         </div>
@@ -180,12 +153,12 @@ require 'cek.php';
                                                         <form method="post">
                                                             <div class="modal-body">
                                                                 Apakah Anda Yakin Ingin Menghapus
-                                                                <?= $namabarang; ?>?
-                                                                <input type="hidden" name="idb" value="<?= $idb; ?>">
+                                                                <?= $email; ?>?
+                                                                <input type="hidden" name="id" value="<?= $iduser; ?>">
                                                                 <br>
                                                                 <br>
                                                                 <button type="submit" class="btn btn-danger"
-                                                                    name="hapusbarang">Hapus</button>
+                                                                    name="hapusadmin">Hapus</button>
                                                             </div>
                                                         </form>
 
@@ -237,7 +210,7 @@ require 'cek.php';
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Tambah Barang</h4>
+                <h4 class="modal-title">Tambah Akun Baru</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
@@ -245,13 +218,11 @@ require 'cek.php';
             <form method="post">
                 <div class="modal-body">
                     <br>
-                    <input type="text" name="namabarang" placeholder="Nama Barang" class="form-control" required>
+                    <input type="email" name="email" placeholder="Email" class="form-control" required>
                     <br>
-                    <input type="text" name="deskripsi" placeholder="Deskripsi Barang" class="form-control" required>
+                    <input type="password" name="password" placeholder="Password" class="form-control" required>
                     <br>
-                    <input type="number" name="stock" placeholder="Jumlah Barang" class="form-control" required>
-                    <br>
-                    <button type="submit" class="btn btn-primary" name="addnewbarang">Submit</button>
+                    <button type="submit" class="btn btn-primary" name="addadmin">Submit</button>
                 </div>
             </form>
 
