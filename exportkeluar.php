@@ -5,7 +5,7 @@ require 'cek.php';
 <html>
 
 <head>
-    <title>Inventory HOKBEN</title>
+    <title>Barang Keluar</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -24,47 +24,47 @@ require 'cek.php';
         <h4>(Inventory)</h4>
         <div class="data-tables datatable-dark">
 
-            <table class="table table-bordered" id="mauexport" width="100%" cellspacing="0">
+            <table class="table table-bordered" id="exportkeluar" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th>Tanggal</th>
                         <th>Nama Barang</th>
-                        <th>Deskripsi</th>
-                        <th>Stock</th>
+                        <th>Jumlah</th>
+                        <th>Penerima</th>
                     </tr>
                 </thead>
                 <tbody>
 
-
                     <?php
-                    $ambilsemuadatastock = mysqli_query($conn, "SELECT * FROM stock");
-                    $i = 1;
+                    $ambilsemuadatastock = mysqli_query($conn, "SELECT * FROM keluar k, stock s WHERE s.id_barang = k.id_barang");
                     while ($data = mysqli_fetch_array($ambilsemuadatastock)) {
-                        $namabarang = $data['nama_barang'];
-                        $deskripsi = $data['deskripsi'];
-                        $stock = $data['stock'];
+                        $idk = $data['id_keluar'];
                         $idb = $data['id_barang'];
+                        $tanggal = $data['tanggal'];
+                        $namabarang = $data['nama_barang'];
+                        $qty = $data['qty'];
+                        $penerima = $data['penerima'];
                         ?>
                         <tr>
                             <td>
-                                <?= $i++; ?>
+                                <?php echo $tanggal; ?>
                             </td>
                             <td>
                                 <?php echo $namabarang; ?>
                             </td>
                             <td>
-                                <?php echo $deskripsi; ?>
+                                <?php echo $qty; ?>
                             </td>
                             <td>
-                                <?php echo $stock; ?>
+                                <?php echo $penerima; ?>
                             </td>
                         </tr>
 
                         <?php
                     }
                     ;
-
                     ?>
+
                 </tbody>
             </table>
 
@@ -73,7 +73,7 @@ require 'cek.php';
 
     <script>
         $(document).ready(function () {
-            $('#mauexport').DataTable({
+            $('#exportkeluar').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
                     'excel', 'pdf', 'print'
