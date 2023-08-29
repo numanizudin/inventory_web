@@ -11,7 +11,7 @@ require 'cek.php';
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Inventory HOKBEN STASIUN</title>
+    <title>Inventory HOKBEN</title>
     <link href="css/styles.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet"
         crossorigin="anonymous" />
@@ -59,6 +59,7 @@ require 'cek.php';
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                                 Tambah Data Barang Baru
                             </button>
+                            <a href="export.php" class="btn btn-info">Export Data</a>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
