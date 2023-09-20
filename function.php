@@ -10,13 +10,64 @@ if (isset($_POST['addnewbarang'])) {
     $deskripsi = $_POST['deskripsi'];
     $stock = $_POST['stock'];
 
-    $addtotable = mysqli_query($conn, "INSERT INTO stock (nama_barang, deskripsi, stock) VALUES('$namabarang','$deskripsi', '$stock')");
-    if ($addtotable) {
-        header('location:index.php');
-    } else {
-        echo 'Gagal';
-        header('location:index.php');
+    //UPLOAD GAMBAR
+    $allowed_extension = array('png', 'jpg');
+    $nama = $_FILES['file']['name']; //NGAMBIL NAMA GAMBAR
+    $dot = explode('.', $nama);
+    $ekstensi = strtolower(end($dot)); // NGAMBIL EKSTENSINYA
+    $ukuran = $_FILES['file']['size']; // NGAMBIL SIZE FILENYA
+    $file_tmp = $_FILES['file']['tmp_name']; // NGAMBIL LOKASI FILENYA
 
+    //PENAMAAN FILE -> ENKRIPSI
+    $image = md5(uniqid($nama, true) . time()) . '.' . $ekstensi; //MENGGABUNGKAN NAMA FILE YANG DI ENKRIPSI DGN EKSTENSINYA
+
+    //VALIDASI UDAH ADA ATAU BELUM
+    $cek = mysqli_query($conn, "SELECT * FROM stock WHERE nama_barang='$namabarang'");
+    $hitung = mysqli_num_rows($cek);
+
+    if ($hitung < 1) {
+        //JIKA BELUM ADA
+
+        //PROSES UPLOAD GAMBAR
+        if (in_array($ekstensi, $allowed_extension) === true) {
+            //VALIDASI UKURAN FILE
+            if ($ukuran < 1500000) {
+                move_uploaded_file($file_tmp, 'images/' . $image);
+
+                $addtotable = mysqli_query($conn, "INSERT INTO stock (nama_barang, deskripsi, stock, image) VALUES('$namabarang','$deskripsi', '$stock', '$image')");
+                if ($addtotable) {
+                    header('location:index.php');
+                } else {
+                    echo 'Gagal';
+                    header('location:index.php');
+                }
+            } else {
+                //KALAU FILE LEBIH dari 1.5MB
+                echo '
+            <script>
+            alert("Ukuran File Terlalu Besar");
+            windows.location.href="index.php";
+            </script>
+            ';
+            }
+        } else {
+            //KALAU GAMBAR NYA TIDAK JPG/PNG
+            echo '
+            <script>
+            alert("Format File Tidak PNG/JPG");
+            windows.location.href="index.php";
+            </script>
+            ';
+        }
+
+    } else {
+        // JIKA SUDAH ADA
+        echo '
+        <script>
+        alert("Nama Barang Sudah Terdaftar");
+        windows.location.href="index.php";
+        </script>
+        ';
     }
 }
 ;
@@ -89,18 +140,47 @@ if (isset($_POST['updatebarang'])) {
     $deskripsi = $_POST['deskripsi'];
     $namabarang = $_POST['namabarang'];
 
-    $update = mysqli_query($conn, "UPDATE stock SET nama_barang='$namabarang', deskripsi='$deskripsi' WHERE id_barang='$idb'");
-    if ($update) {
-        header('location:index.php');
+    //UPLOAD GAMBAR
+    $allowed_extension = array('png', 'jpg');
+    $nama = $_FILES['file']['name']; //NGAMBIL NAMA GAMBAR
+    $dot = explode('.', $nama);
+    $ekstensi = strtolower(end($dot)); // NGAMBIL EKSTENSINYA
+    $ukuran = $_FILES['file']['size']; // NGAMBIL SIZE FILENYA
+    $file_tmp = $_FILES['file']['tmp_name']; // NGAMBIL LOKASI FILENYA
+
+    //PENAMAAN FILE -> ENKRIPSI
+    $image = md5(uniqid($nama, true) . time()) . '.' . $ekstensi; //MENGGABUNGKAN NAMA FILE YANG DI ENKRIPSI DGN EKSTENSINYA
+
+    if ($ukuran == 0) {
+        // JIKA TIDAK INGIN UPLOAD
+        $update = mysqli_query($conn, "UPDATE stock SET nama_barang='$namabarang', deskripsi='$deskripsi' WHERE id_barang='$idb'");
+        if ($update) {
+            header('location:index.php');
+        } else {
+            echo 'Gagal';
+            header('location:index.php');
+        }
     } else {
-        echo 'Gagal';
-        header('location:index.php');
+        //JIKA INGIN UPLOAD
+        move_uploaded_file($file_tmp, 'images/' . $image);
+        $update = mysqli_query($conn, "UPDATE stock SET nama_barang='$namabarang', deskripsi='$deskripsi', image='$image' WHERE id_barang='$idb'");
+        if ($update) {
+            header('location:index.php');
+        } else {
+            echo 'Gagal';
+            header('location:index.php');
+        }
     }
 }
 
 //MENGHAPUS BARANG DARI STOCK
 if (isset($_POST['hapusbarang'])) {
-    $idb = $_POST['idb'];
+    $idb = $_POST['idb']; // id Barang
+
+    $gambar = mysqli_query($conn, "SELECT * FROM stock WHERE id_barang='$idb'");
+    $get = mysqli_fetch_array($gambar);
+    $img = 'images/' . $get['image'];
+    unlink($img);
 
     $hapus = mysqli_query($conn, "DELETE FROM stock WHERE id_barang='$idb'");
     if ($hapus) {

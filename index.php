@@ -17,6 +17,17 @@ require 'cek.php';
         crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"
         crossorigin="anonymous"></script>
+    <style>
+        .zoomable {
+            width: 100px;
+        }
+
+        /* .zoomable:hover {
+            transform: scale(2.5);
+            transition: 0.3s ease;
+        } */
+    </style>
+
 </head>
 
 <body class="sb-nav-fixed">
@@ -87,6 +98,7 @@ require 'cek.php';
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>Gambar</th>
                                             <th>Nama Barang</th>
                                             <th>Deskripsi</th>
                                             <th>Stock</th>
@@ -104,10 +116,24 @@ require 'cek.php';
                                             $deskripsi = $data['deskripsi'];
                                             $stock = $data['stock'];
                                             $idb = $data['id_barang'];
+
+                                            // CEK ADA GAMBAR ATAU TIDAK
+                                            $gambar = $data['image']; //AMBIL GAMBAR
+                                            if ($gambar == null) {
+                                                // jika tidak ada gambar
+                                                $img = 'No Photo';
+                                            } else {
+                                                // jika ada gambar
+                                                $img = '<img src="images/' . $gambar . '" class="zoomable">';
+                                            }
+
                                             ?>
                                             <tr>
                                                 <td>
                                                     <?= $i++; ?>
+                                                </td>
+                                                <td>
+                                                    <?= $img; ?>
                                                 </td>
                                                 <td>
                                                     <?= $namabarang; ?>
@@ -143,7 +169,7 @@ require 'cek.php';
                                                         </div>
 
                                                         <!-- Modal body -->
-                                                        <form method="post">
+                                                        <form method="post" enctype="multipart/form-data">
                                                             <div class="modal-body">
                                                                 <br>
                                                                 <input type="text" name="namabarang"
@@ -153,6 +179,8 @@ require 'cek.php';
                                                                 <input type="text" name="deskripsi"
                                                                     value="<?= $deskripsi; ?>" class="form-control"
                                                                     required>
+                                                                <br>
+                                                                <input type="file" name="file" class="form-control">
                                                                 <br>
                                                                 <input type="hidden" name="idb" value="<?= $idb; ?>">
                                                                 <button type="submit" class="btn btn-primary"
@@ -242,7 +270,7 @@ require 'cek.php';
             </div>
 
             <!-- Modal body -->
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <br>
                     <input type="text" name="namabarang" placeholder="Nama Barang" class="form-control" required>
@@ -250,6 +278,8 @@ require 'cek.php';
                     <input type="text" name="deskripsi" placeholder="Deskripsi Barang" class="form-control" required>
                     <br>
                     <input type="number" name="stock" placeholder="Jumlah Barang" class="form-control" required>
+                    <br>
+                    <input type="file" name="file" class="form-control">
                     <br>
                     <button type="submit" class="btn btn-primary" name="addnewbarang">Submit</button>
                 </div>

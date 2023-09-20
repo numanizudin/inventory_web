@@ -17,6 +17,16 @@ require 'cek.php';
         crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"
         crossorigin="anonymous"></script>
+    <style>
+        .zoomable {
+            width: 100px;
+        }
+
+        /* .zoomable:hover {
+            transform: scale(2.5);
+            transition: 0.3s ease;
+        } */
+    </style>
 </head>
 
 <body class="sb-nav-fixed">
@@ -71,6 +81,7 @@ require 'cek.php';
                                     <thead>
                                         <tr>
                                             <th>Tanggal</th>
+                                            <th>Gambar</th>
                                             <th>Nama Barang</th>
                                             <th>Jumlah</th>
                                             <th>Penerima</th>
@@ -88,10 +99,24 @@ require 'cek.php';
                                             $namabarang = $data['nama_barang'];
                                             $qty = $data['qty'];
                                             $penerima = $data['penerima'];
+
+                                            // CEK ADA GAMBAR ATAU TIDAK
+                                            $gambar = $data['image']; //AMBIL GAMBAR
+                                            if ($gambar == null) {
+                                                // jika tidak ada gambar
+                                                $img = 'No Photo';
+                                            } else {
+                                                // jika ada gambar
+                                                $img = '<img src="images/' . $gambar . '" class="zoomable">';
+                                            }
+
                                             ?>
                                             <tr>
                                                 <td>
                                                     <?= $tanggal; ?>
+                                                </td>
+                                                <td>
+                                                    <?= $img; ?>
                                                 </td>
                                                 <td>
                                                     <?= $namabarang; ?>
@@ -237,7 +262,9 @@ require 'cek.php';
                             $idbarangnya = $fetcharray['id_barang'];
                             ?>
 
-                            <option value="<?= $idbarangnya; ?>"><?= $namabarangnya; ?></option>
+                            <option value="<?= $idbarangnya; ?>">
+                                <?= $namabarangnya; ?>
+                            </option>
                             <?php
                         }
                         ?>
